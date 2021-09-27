@@ -3,7 +3,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from .models import Superhero
 
-# Create your views here.
 def index(request):
     all_heroes = Superhero.objects.all()
     context = {
@@ -20,8 +19,6 @@ def detail(request, hero_id):
 
 def create(request):
     if request.method == "POST":
-        # save the form contents as a new database object
-        # return to index
         name = request.POST.get('name')
         alter_ego = request.POST.get('alter_ego')
         primary = request.POST.get('primary')
@@ -52,3 +49,8 @@ def edit(request, hero_id):
             'single_hero': single_hero
         }
         return render(request, 'superheroes/edit.html', context)
+
+def remove(request, hero_id):
+    single_hero = Superhero.objects.get(pk = hero_id)
+    single_hero.delete()
+    return HttpResponseRedirect(reverse('superheroes:index'))
